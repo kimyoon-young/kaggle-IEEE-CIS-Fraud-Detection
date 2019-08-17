@@ -55,6 +55,18 @@ else:
     test_df = pd.read_pickle('../input/ieee-data-minification/test_transaction.pkl')
     test_identity = pd.read_pickle('../input/ieee-data-minification/test_identity.pkl')
 
+
+#remove D15 feature
+cols_to_drop=['D15']
+
+
+print('{} features are going to be dropped for being useless'.format(len(cols_to_drop)))
+
+train_df = train_df.drop(cols_to_drop, axis=1)
+test_df = test_df.drop(cols_to_drop, axis=1)
+
+
+
 ########################### Reset values for "noise" card1
 valid_card = train_df['card1'].value_counts()
 
