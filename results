@@ -1,0 +1,9 @@
+#1 base
+training time : 5023
+10 fold CV score:
+LB score : 0.9454
+
+
+#2 D15 feature removed
+#ref : https://www.kaggle.com/georsara1/d15-seems-important-remove-it
+
