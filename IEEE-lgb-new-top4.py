@@ -1,3 +1,5 @@
+#0.9449가 안나와서 새로
+
 import pandas as pd
 import numpy as np
 from tqdm import tqdm_notebook
@@ -10,9 +12,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 sns.set()
 import time
-
-
-
 
 def reduce_mem_usage(df):
     """ iterate through all the columns of a dataframe and modify the data type
@@ -52,38 +51,27 @@ def reduce_mem_usage(df):
 
     return df
 
-
 start = time.time()
-LOCAL_TEST = True
 
 folder_path = '../input/'
 print('Loading data...')
 
-train_identity = pd.read_csv(f'{folder_path}train_identity.csv')
+train_identity = pd.read_csv(f'{folder_path}train_identity.csv', index_col='TransactionID')
 print('\tSuccessfully loaded train_identity!')
 
-train_transaction = pd.read_csv(f'{folder_path}train_transaction.csv')
+train_transaction = pd.read_csv(f'{folder_path}train_transaction.csv', index_col='TransactionID')
 print('\tSuccessfully loaded train_transaction!')
 
-test_identity = pd.read_csv(f'{folder_path}test_identity.csv')
+test_identity = pd.read_csv(f'{folder_path}test_identity.csv', index_col='TransactionID')
 print('\tSuccessfully loaded test_identity!')
 
-test_transaction = pd.read_csv(f'{folder_path}test_transaction.csv')
+test_transaction = pd.read_csv(f'{folder_path}test_transaction.csv', index_col='TransactionID')
 print('\tSuccessfully loaded test_transaction!')
 
 sub = pd.read_csv(f'{folder_path}sample_submission.csv')
 print('\tSuccessfully loaded sample_submission!')
 
 print('Data was successfully loaded!\n')
-
-
-if LOCAL_TEST:
-    train_transaction = train_transaction.iloc[-100000:,].reset_index(drop=True)
-    test_transaction = train_transaction.iloc[:400000,].reset_index(drop=True)
-
-    train_identity = train_identity[train_identity['TransactionID'].isin(train_transaction['TransactionID'])].reset_index(drop=True)
-    test_identity =  train_identity[train_identity['TransactionID'].isin(test_transaction['TransactionID'])].reset_index(drop=True)
-
 
 
 def id_split(dataframe):
@@ -145,10 +133,13 @@ print(f'Test dataset has {test.shape[0]} rows and {test.shape[1]} columns.')
 gc.collect()
 
 
+############ ver4
+
+#remove D10 , D4
 
 useful_features = ['TransactionAmt', 'ProductCD', 'card1', 'card2', 'card3', 'card4', 'card5', 'card6', 'addr1', 'addr2', 'dist1',
                    'P_emaildomain', 'R_emaildomain', 'C1', 'C2', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'C11', 'C12', 'C13',
-                   'C14', 'D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D8', 'D9', 'D10', 'D11', 'D12', 'D13', 'D14', 'D15', 'M2', 'M3',
+                   'C14', 'D1', 'D2', 'D3', 'D5', 'D6', 'D8', 'D9', 'D11', 'D12', 'D13', 'D14', 'D15', 'M2', 'M3',
                    'M4', 'M5', 'M6', 'M7', 'M8', 'M9', 'V3', 'V4', 'V5', 'V6', 'V7', 'V8', 'V9', 'V10', 'V11', 'V12', 'V13', 'V17',
                    'V19', 'V20', 'V29', 'V30', 'V33', 'V34', 'V35', 'V36', 'V37', 'V38', 'V40', 'V44', 'V45', 'V46', 'V47', 'V48',
                    'V49', 'V51', 'V52', 'V53', 'V54', 'V56', 'V58', 'V59', 'V60', 'V61', 'V62', 'V63', 'V64', 'V69', 'V70', 'V71',
@@ -164,7 +155,7 @@ useful_features = ['TransactionAmt', 'ProductCD', 'card1', 'card2', 'card3', 'ca
                    'V277', 'V278', 'V279', 'V280', 'V282', 'V283', 'V285', 'V287', 'V288', 'V289', 'V291', 'V292', 'V294', 'V303',
                    'V304', 'V306', 'V307', 'V308', 'V310', 'V312', 'V313', 'V314', 'V315', 'V317', 'V322', 'V323', 'V324', 'V326',
                    'V329', 'V331', 'V332', 'V333', 'V335', 'V336', 'V338', 'id_01', 'id_02', 'id_03', 'id_05', 'id_06', 'id_09',
-                   'id_11', 'id_12', 'id_13', 'id_14', 'id_15', 'id_17', 'id_19', 'id_20', 'id_30', 'id_31', 'id_32', 'id_33',
+                   'id_11', 'id_12', 'id_13', 'id_14', 'id_15', 'id_16', 'id_28', 'id_29', 'id_35', 'id_17', 'id_19', 'id_20', 'id_30', 'id_31', 'id_32', 'id_33',
                    'id_36', 'id_37', 'id_38', 'DeviceType', 'DeviceInfo', 'device_name', 'device_version', 'OS_id_30', 'version_id_30',
                    'browser_id_31', 'version_id_31', 'screen_width', 'screen_height', 'had_id']
 
@@ -263,55 +254,39 @@ for feature in ['id_01', 'id_31', 'id_33', 'id_36']:
 
 ########
 # addtional count (version.1)
+# remove C3, D7, dist2
 
-# for feature in ['C1','C2','C3','C4','C5','C6','C7','C8','C9','C10','C11','C12','C13','C14',
-#           'D1','D2','D3','D4','D5','D6','D7','D8','D9',
-#           'addr1','addr2',
-#           'dist1','dist2',
-#           'P_emaildomain', 'R_emaildomain'
-#          ]:
-#     train[feature + '_count_full'] = train[feature].map(pd.concat([train[feature], test[feature]], ignore_index=True).value_counts(dropna=False))
-#     test[feature + '_count_full'] = test[feature].map(pd.concat([train[feature], test[feature]], ignore_index=True).value_counts(dropna=False))
-#
+for feature in ['C1','C2','C4','C5','C6','C7','C8','C9','C10','C11','C12','C13','C14',
+          'D1','D2','D3','D5','D6','D8','D9',
+          'addr1','addr2',
+          'dist1',
+          'P_emaildomain', 'R_emaildomain'
+         ]:
+    train[feature + '_count_full'] = train[feature].map(pd.concat([train[feature], test[feature]], ignore_index=True).value_counts(dropna=False))
+    test[feature + '_count_full'] = test[feature].map(pd.concat([train[feature], test[feature]], ignore_index=True).value_counts(dropna=False))
+
+
+
 
 #########
-#productCD, M4 coding(version.2)
+#productCD, M4 coding(version.7)
+# version.8  add id feature
+# https://www.kaggle.com/psystat/ieee-extensive-eda-lgb-with-r
 
+# version 8.1 same as 8.0 except for no drop below
 
-##########
-#anbomarl detection in geo information (version.3)
+# version 8.2 add id_27, id_23
 
-# Let's look on bank addres and client addres matching
-# card3/card5 bank country and name?
-# Addr2 -> Clients geo position (country)
-# Most common entries -> normal transactions
-# Less common etries -> some anonaly
-train['bank_type'] = train['card3'].astype(str)+'_'+train['card5'].astype(str)
-test['bank_type']  = test['card3'].astype(str)+'_'+test['card5'].astype(str)
+          #version 2까지 함께 적용된거네
+for col in ['ProductCD','M4', 'id_12', 'id_15', 'id_16', 'id_28', 'id_29', 'id_35', 'id_36', 'id_37', 'id_38',
+            'DeviceType']:
+    temp_dict = train.groupby([col])['isFraud'].agg(['mean']).reset_index().rename(
+                                                        columns={'mean': col+'_target_mean'})
+    temp_dict.index = temp_dict[col].values
+    temp_dict = temp_dict[col+'_target_mean'].to_dict()
 
-train['address_match'] = train['bank_type'].astype(str)+'_'+train['addr2'].astype(str)
-test['address_match']  = test['bank_type'].astype(str)+'_'+test['addr2'].astype(str)
-
-for col in ['address_match','bank_type']:
-    temp_df = pd.concat([train[[col]], test[[col]]])
-    temp_df[col] = np.where(temp_df[col].str.contains('nan'), np.nan, temp_df[col])
-    temp_df = temp_df.dropna()
-    fq_encode = temp_df[col].value_counts().to_dict()
-    train[col] = train[col].map(fq_encode)
-    test[col]  = test[col].map(fq_encode)
-
-train['address_match'] = train['address_match']/train['bank_type']
-test['address_match']  = test['address_match']/test['bank_type']
-
-
-# for col in ['ProductCD','M4']:
-#     temp_dict = train_df.groupby([col])[TARGET].agg(['mean']).reset_index().rename(
-#                                                         columns={'mean': col+'_target_mean'})
-#     temp_dict.index = temp_dict[col].values
-#     temp_dict = temp_dict[col+'_target_mean'].to_dict()
-#
-#     train_df[col+'_target_mean'] = train_df[col].map(temp_dict)
-#     test_df[col+'_target_mean']  = test_df[col].map(temp_dict)
+    train[col+'_target_mean'] = train[col].map(temp_dict)
+    test[col+'_target_mean']  = test[col].map(temp_dict)
 
 
 
@@ -331,7 +306,9 @@ for c in ['P_emaildomain', 'R_emaildomain']:
     test[c + '_suffix'] = test[c + '_suffix'].map(lambda x: x if str(x) not in us_emails else 'us')
 
 
-
+#drop ['id_16', 'id_28', 'id_29', 'id_35', 'id_23','id_27']
+train = train.drop(['id_16', 'id_28', 'id_29', 'id_35'], axis=1)
+test = test.drop(['id_16', 'id_28', 'id_29', 'id_35'], axis=1)
 
 for col in train.columns:
     if train[col].dtype == 'object':
@@ -349,6 +326,11 @@ X = train.sort_values('TransactionDT').drop(['isFraud', 'TransactionDT'], axis=1
 y = train.sort_values('TransactionDT')['isFraud']
 
 X_test = test.drop(['TransactionDT'], axis=1)
+
+
+
+
+
 
 del train, test
 gc.collect()
@@ -416,11 +398,11 @@ print(f"Out of folds AUC = {roc_auc_score(y, y_oof)}")
 
 
 sub['isFraud'] = y_preds
-sub.to_csv("submission_ver3.csv", index=False)
+sub.to_csv("submission_new_top4.csv", index=False)
 
 
 feature_importances['average'] = feature_importances[[f'fold_{fold_n + 1}' for fold_n in range(folds.n_splits)]].mean(axis=1)
-feature_importances.to_csv('feature_importances.csv')
+feature_importances.to_csv('feature_importances_new_top4.csv')
 
 plt.figure(figsize=(16, 16))
 sns.barplot(data=feature_importances.sort_values(by='average', ascending=False).head(50), x='average', y='feature');
@@ -430,4 +412,6 @@ plt.title('50 TOP feature importance over {} folds average'.format(folds.n_split
 end = time.time()
 
 print('elpased time : {}'.format(end-start))
+
+
 

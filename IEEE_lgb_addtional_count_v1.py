@@ -377,11 +377,11 @@ print(f"Out of folds AUC = {roc_auc_score(y, y_oof)}")
 
 
 sub['isFraud'] = y_preds
-sub.to_csv("submission2.csv", index=False)
+sub.to_csv("submission_ver1.csv", index=False)
 
 
 feature_importances['average'] = feature_importances[[f'fold_{fold_n + 1}' for fold_n in range(folds.n_splits)]].mean(axis=1)
-feature_importances.to_csv('feature_importances.csv')
+feature_importances.to_csv('feature_importances_ver1.csv')
 
 plt.figure(figsize=(16, 16))
 sns.barplot(data=feature_importances.sort_values(by='average', ascending=False).head(50), x='average', y='feature');
